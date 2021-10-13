@@ -9,7 +9,7 @@ import it.cnr.speech.segmentation.Energy;
 
 public class DialogueAnalyserEnergyPitch {
 
-		public void cleanFolder(File folder) throws Exception {
+	 public void cleanFolder(File folder) throws Exception {
 		if (folder.exists() && folder.listFiles().length > 0)
 			FileUtils.deleteDirectory(folder);
 	}

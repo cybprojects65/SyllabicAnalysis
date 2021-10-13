@@ -169,4 +169,17 @@ public class Utils {
 		else
 			return "Not Applicable";
 	}
+	
+	public static float samplesToSeconds(float fs,int sample) {
+		
+		return (float)sample/fs;
+		
+	}
+	
+	public static int secondsToSamples(float fs,float seconds) {
+		
+		return (int)Math.round(fs*seconds);
+		
+	}
+	
 }

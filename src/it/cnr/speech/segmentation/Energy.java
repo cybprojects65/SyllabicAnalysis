@@ -25,7 +25,7 @@ public class Energy {
 		this.windowIns = windowIns;
 	}
 
-	public void segmentSignal(File audioFile, File outputFolder) throws Exception {
+	public double segmentSignal(File audioFile, File outputFolder) throws Exception {
 
 		double[] normalisedEnergyCurve = energyCurve(windowIns, audioFile, false);
 		double[] derivative = Utils.derivative(normalisedEnergyCurve);
@@ -99,6 +99,8 @@ public class Energy {
 			throw new Exception("Audio is too low for segmentation");
 		
 		System.out.println("SNR:"+maxSNR);
+		
+		return maxSNR;
 		
 	}
 

@@ -2,6 +2,9 @@ package it.cnr.speech.segmentation;
 
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import edu.cuny.qc.speech.AuToBI.core.Contour;
 import edu.cuny.qc.speech.AuToBI.core.ContourIterator;
@@ -173,6 +176,77 @@ public class PitchExtractor {
     }
     
 
+    public void calculatePitch(String wavefile, double minPitch, double maxPitch) {
+    	try{
+    	WavReader reader = new WavReader();
+    	WavData wave = reader.read(wavefile);
+    	double duration = wave.getDuration();
+    	
+    	edu.cuny.qc.speech.AuToBI.PitchExtractor pe = new edu.cuny.qc.speech.AuToBI.PitchExtractor(wave);
+    	Contour contour = pe.soundToPitch(pitchWindowSec,minPitch,maxPitch);
+    	 //pe.soundToPitchAc(pitchWindowSec, minPitch, 1.0, 15, 0.03, 0.45, 0.01, 0.35, 0.14, maxPitch);
+    	int contentSize = contour.size();
+    	//HashMap<Integer,Double> pitchMap = new HashMap<>();
+    	int pitchCurveLen = (int) (duration/pitchWindowSec);
+    	
+    	this.pitchCurve = new Double[pitchCurveLen];
+    	
+    	for (int i = 0; i < contentSize; ++i) {
+    		double time = contour.timeFromIndex(i)-pitchWindowSec; // the indicated time is the final marker of the pitch
+    		double value = contour.get(i);
+            //System.out.println("point[" + i + "]: " + contour.get(i) + " -- " + contour.timeFromIndex(i));
+            
+            Integer index = (int) (time/pitchWindowSec);
+            pitchCurve[index] = value;
+          }
+    	
+    	System.out
+        .println(
+            "pitch elements "+pitchCurve.length);
+    	
+    	/*
+    	double time = 0;
+    	List<Double> pitchArray = new ArrayList<>();
+    	int i = 0;
+    	while (i<contentSize)
+    	{
+    		double value = contour.get(time);
+    		contour.
+    		System.out.println("time "+time+ " value " + value);
+    		
+    		
+    		pitchArray.add(value);
+    		time = time + pitchWindowSec;
+    		i++;
+    	}
+    	
+    	this.pitchCurve = new Double[pitchArray.size()];
+    	pitchCurve = pitchArray.toArray(pitchCurve);
+    	*/
+    	/*
+    	this.pitchCurve = new Double[contour.size()];
+    	ContourIterator iterator = contour.iterator();
+    	int i = 0;
+    	while (iterator.hasNext()){
+    		Pair<Double,Double> pair = iterator.next();
+    		System.out.println("ptc "+pair.first+" "+pair.second);
+    		if (pair.second == null){
+    			System.out.println(pair.second);
+    			pair.second=Double.NaN;
+    		}
+    		pitchCurve[i]=pair.second;
+    		i++;
+    	}
+    	
+    	*/
+    	
+    	
+    	}catch(Exception e ){
+    		e.printStackTrace();
+    		
+    	}
+    }
+    
 	public double[] normalize(double af[]) {
 		double f = 0.0F;
 		for (int i = 0; i < af.length; i++) {

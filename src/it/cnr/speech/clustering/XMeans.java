@@ -381,13 +381,16 @@ public class XMeans
 			}
 		}
 
-		FileWriter fw2 = new FileWriter("textdf.csv");
+		File tempFile = new File("textdf.csv");
+		FileWriter fw2 = new FileWriter(tempFile);
 		fw2.write(sb.toString());
 		fw2.close();
 
-		InputStream tis = new ByteArrayInputStream(sb.toString().getBytes("UTF-8"));
+		//InputStream tis = new ByteArrayInputStream(sb.toString().getBytes("UTF-8"));
 		CSVLoader loader = new CSVLoader();
-		loader.setSource(tis);
+		loader.setSource(tempFile);
+		//loader.setSource(tis);
+		
 		Instances id = loader.getDataSet();
 		
 		setMaxIterations(maxIterations);
